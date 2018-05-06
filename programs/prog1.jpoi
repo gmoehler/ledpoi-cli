@@ -1,2 +1,2 @@
-// loadScene(0)
-playFrames(0, 200, 3, 50)
+loadScene(0)
+playFrames(0, 200, 3, 20)
