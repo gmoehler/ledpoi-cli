@@ -1,12 +1,12 @@
 {
 	"program": {
 		"files": [
-			"prog1.jpoi",
-			"prog2.jpoi"
+			"programs/prog1.jpoi",
+			"programs/prog2.jpoi"
 		]
 	},
 	"images": {
-		"0": "image1.png",
-		"1": "image2.png"
+		"0": "images/06_spiral_rainbow.png",
+		"1": "images/11_fork_white.png"
 	}
 }

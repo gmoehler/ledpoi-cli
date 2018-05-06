@@ -1,0 +1,4 @@
+loadScene(1)
+loopStart(1, 2)
+  playFrames(100, 200, 3, 20)
+loopEnd(1)

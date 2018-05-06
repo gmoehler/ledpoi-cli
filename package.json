@@ -10,11 +10,12 @@
   "author": "gm",
   "license": "MIT",
   "dependencies": {
-    "csv-parse": "^2.0.4",
+    "csv-parse": "2.4.0",
+    "eslint": "4.19.1",
     "inquirer": "5.2.0",
     "net": "1.0.2",
-    "pngjs": "^3.3.2",
-    "serialport": "6.1.1"
+    "pngjs": "3.3.3",
+    "serialport": "6.2.0"
   },
   "devDependencies": {
     "jest": "22.4.3"

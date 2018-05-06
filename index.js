@@ -4,6 +4,7 @@ const configFile = "config.json";
 
 const fs = require('fs');
 const inquirer = require('inquirer');
+
 const prg = require('./lib/program');
 const img = require('./lib/image');
 const show = require('./lib/show');
@@ -51,7 +52,7 @@ const mainChoices =  [
 		name: 'Send wifi connect', 
 	   	value:'ip_connect'
    	},
-	   {
+	{
 		name: 'Send wifi disconnect', 
 	   	value:'ip_disconnect'
    	},
