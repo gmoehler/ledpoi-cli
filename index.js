@@ -63,7 +63,12 @@ const mainChoices =  [
    	{
 		name: 'Status', 
 	   	value:'status'
+	},
+	{
+		name: 'Selftest', 
+	   	value:'selftest'
    	},
+
    	{
 	   	name: 'Exit', 
 		value:'exit'
@@ -253,6 +258,12 @@ function main(){
 		else if (answer.selection === "status") {
 			utils.checkConnected(client) 
 			.then((client) => ctrl.logStatus(client))
+			.then(main)
+			.catch(handleError);
+		}
+		else if (answer.selection === "selftest") {
+			utils.checkConnected(client) 
+			.then((client) => ctrl.selftest(client))
 			.then(main)
 			.catch(handleError);
 		}
