@@ -18,3 +18,10 @@ const N_CMD_FIELDS=6;
 
 // this is due to max NVS length of 1984 bytes
 const N_PROG_STEPS=330;
+
+// serial baud rate
+//const UART_BAUD=115200
+const UART_BAUD=921600
+
+// delay after 100 bytes sent
+const pauseAfter100Bytes = 40;
