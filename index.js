@@ -72,6 +72,10 @@ const mainChoices =  [
 		name: 'Selftest', 
 	   	value:'selftest'
    	},
+	{
+		name: 'Init flash', 
+	   	value:'initFlash'
+   	},
 
    	{
 	   	name: 'Exit', 
@@ -273,6 +277,13 @@ function main(){
 			.then(main)
 			.catch(handleError);
 		}
+		else if (answer.selection === "initFlash") {
+			utils.checkConnected(client) 
+			.then((client) => ctrl.initFlash(client))
+			.then(main)
+			.catch(handleError);
+		}
+
 		else {
 			utils.saveConfig(configFile, config)
 			.then(() => {
