@@ -32,6 +32,10 @@ const mainChoices =  [
 	   	name: 'Upload show', 
 		value:'up_show'
 	} ,
+	{
+		name: 'Upload show without images', 
+	 	value:'up_show_prog'
+ 	} ,
    	{
 		name: 'Upload image', 
 	   	value:'up_image'
@@ -89,7 +93,7 @@ var mainMenu = [
     message: 'Filename:',
     default: getDefaultFilename,
     when: function(answers) {
-      return (["up_image", "up_prog", "up_show"].includes(answers.selection));
+      return (["up_image", "up_prog", "up_show", "up_show_prog"].includes(answers.selection));
     }
   },
     {
@@ -127,7 +131,8 @@ function getDefaultFilename(answers) {
 			return config.image;
 		case "up_prog":
 			return config.prog;
- 		case "up_show":
+		case "up_show":
+		case "up_show_prog":
 			return config.show;
 		default:
 			return "";
@@ -183,10 +188,11 @@ function main(){
 			.then(main)
 			.catch(handleError);
 		}
-		else if (answer.selection === "up_show") {
+		else if (answer.selection === "up_show" || 
+				answer.selection === "up_show_prog") {
 			utils.checkConnected(client) 
 			.then(() => {
-				return show.uploadShow(client, answer.filename);
+				return show.uploadShow(client, answer.filename, answer.selection === "up_show_prog");
 			})
 			.then(() => {
 				config.show = answer.filename;
