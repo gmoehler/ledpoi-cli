@@ -153,10 +153,10 @@ function getDefaultFilename(answers) {
 
 
 function getSyncs(){
-	var str = "Choose sync point: ";
+	var str = "Choose sync point: \n";
 	const syncs = prg.getSyncMap();
 	for (let i in syncs) {
-		str = str.concat(i + ":" + syncs[i] + " ");
+		str = str.concat("  " + i + ": " + syncs[i] + " \n");
 	}
 	
 	return str;
