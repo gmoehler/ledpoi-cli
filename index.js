@@ -60,9 +60,13 @@ const mainChoices =  [
 		name: 'Send wifi connect', 
 	   	value:'ip_connect'
    	},
-	{
+	   {
 		name: 'Send wifi disconnect', 
 	   	value:'ip_disconnect'
+   	},
+	{
+		name: 'Send client disconnect', 
+	   	value:'client_disconnect'
    	},
    	{
 		name: 'Sync', 
@@ -242,6 +246,12 @@ function main(){
 		else if (answer.selection === "ip_disconnect") {
 			utils.checkConnected(client) 
 			.then(ctrl.disconnectWifi)
+			.then(main)
+			.catch(handleError);
+		}
+		else if (answer.selection === "client_disconnect") {
+			utils.checkConnected(client) 
+			.then(ctrl.clientDisconnect)
 			.then(main)
 			.catch(handleError);
 		}
