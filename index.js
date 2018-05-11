@@ -49,8 +49,12 @@ const mainChoices =  [
 		value:'start_prog'
    	},
    	{
-		name: 'Stop program', 
-	   	value:'stop_prog'
+		name: 'Stop processing', 
+	   	value:'stop_proc'
+	},
+	{
+		name: 'Pause/resume processing', 
+	   	value:'pause_proc'
 	},
 	{
 		name: 'Send wifi connect', 
@@ -247,15 +251,15 @@ function main(){
 			.then(main)
 			.catch(handleError);
 		}
-		else if (answer.selection === "stop_prog") {
+		else if (answer.selection === "stop_proc") {
 			utils.checkConnected(client) 
-			.then(prg.stopProgram)
+			.then(prg.stopProcessing)
 			.then(main)
 			.catch(handleError);
 		}
-		else if (answer.selection === "pause_prog") {
+		else if (answer.selection === "pause_proc") {
 			utils.checkConnected(client) 
-			.then(prg.pauseProgram)
+			.then(prg.pauseProcessing)
 			.then(main)
 			.catch(handleError);
 		}
