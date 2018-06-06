@@ -57,6 +57,10 @@ const mainChoices =  [
 	   	value:'pause_proc'
 	},
 	{
+		name: 'Set IP increment', 
+	   	value:'set_ip_incr'
+   	},
+	{
 		name: 'Send wifi connect', 
 	   	value:'ip_connect'
    	},
@@ -121,9 +125,9 @@ var mainMenu = [
     type: 'input',
     name: 'ip_incr',
     message: 'IP increment:',
-    default: '0',
+    default: getDefaultIpIncr,
     when: function(answers) {
-      return (answers.selection == "ip_connect");
+      return (answers.selection == "set_ip_incr");
 	}
   },
   {
@@ -151,6 +155,9 @@ function getDefaultFilename(answers) {
 	}
 }
 
+function getDefaultIpIncr() {
+	return config.ipIncr;
+}
 
 function getSyncs(){
 	var str = "Choose sync point: \n";
@@ -235,10 +242,21 @@ function main(){
 			.then(main)
 			.catch(handleError);
 		}
+		else if (answer.selection === "set_ip_incr") {
+			utils.checkConnected(client) 
+			.then((client) => {
+		  		return ctrl.setIpIncr(client, parseInt(answer.ip_incr));
+			})
+			.then(() => {
+				config.ipIncr = answer.ip_incr;
+			})
+			.then(main)
+			.catch(handleError);
+		}
 		else if (answer.selection === "ip_connect") {
 			utils.checkConnected(client) 
 			.then((client) => {
-		  		return ctrl.connectWifi(client, parseInt(answer.ip_incr));
+		  		return ctrl.connectWifi(client);
 			})
 			.then(main)
 			.catch(handleError);
