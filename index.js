@@ -57,10 +57,6 @@ const mainChoices =  [
 	   	value:'pause_proc'
 	},
 	{
-		name: 'Set IP increment', 
-	   	value:'set_ip_incr'
-   	},
-	{
 		name: 'Send wifi connect', 
 	   	value:'ip_connect'
    	},
@@ -127,7 +123,7 @@ var mainMenu = [
     message: 'IP increment:',
     default: getDefaultIpIncr,
     when: function(answers) {
-      return (answers.selection == "set_ip_incr");
+      return (["ip_connect", "wifi_connect"].includes(answers.selection) );
 	}
   },
   {
@@ -174,6 +170,11 @@ function handleError(err) {
 	main();
 }
 
+function getIp(ipIncr) {
+	const ip4 = 127 + ipIncr;
+	return `192.168.1.${ip4}`;
+}
+
 function main(){
 	inquirer.prompt(mainMenu).then(answer => {
 		// console.log(answer);
@@ -191,9 +192,10 @@ function main(){
 		else if (answer.selection === "wifi_connect") {
 			utils.checkNotConnected(client) 
 			.then(() => {
-				console.log("Connecting...");
+				const ip = getIp(parseInt(answer.ip_incr));
+				console.log(`Connecting to ${ip}...`);
 				const WifiClient = require("./lib/wificlient");
-				client = new WifiClient("192.168.1.127", 1110);
+				client = new WifiClient(ip, 1110);
 				return client.connect();
 			})
 			.then(main)
@@ -242,19 +244,11 @@ function main(){
 			.then(main)
 			.catch(handleError);
 		}
-		else if (answer.selection === "set_ip_incr") {
-			utils.checkConnected(client) 
-			.then((client) => {
-		  		return ctrl.setIpIncr(client, parseInt(answer.ip_incr));
-			})
-			.then(() => {
-				config.ipIncr = answer.ip_incr;
-			})
-			.then(main)
-			.catch(handleError);
-		}
 		else if (answer.selection === "ip_connect") {
-			utils.checkConnected(client) 
+			utils.checkConnected(client)
+			.then((client) => {
+				return ctrl.setIpIncr(client, parseInt(answer.ip_incr));
+			}) 
 			.then((client) => {
 		  		return ctrl.connectWifi(client);
 			})
