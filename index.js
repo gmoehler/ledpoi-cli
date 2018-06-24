@@ -14,6 +14,7 @@ const config = fs.existsSync(configFile)
 	? require('./' + configFile) : {};
 
 let client = null;
+const clients = [];
 
 const mainChoices =  [
 	{ 
@@ -64,9 +65,13 @@ const mainChoices =  [
 		name: 'Send wifi disconnect', 
 	   	value:'ip_disconnect'
    	},
-	{
+	   {
 		name: 'Send client disconnect', 
 	   	value:'client_disconnect'
+   	},
+	   {
+		name: 'Connect to all pois via Wifi', 
+	   	value:'wifi_connect_all_pois'
    	},
    	{
 		name: 'Sync', 
@@ -201,6 +206,23 @@ function main(){
 			.then(main)
 			.catch(handleError);
 		}
+		else if (answer.selection === "wifi_connect_all_pois") {
+			utils.checkNotConnected(client) 
+			.then(() => {
+				const WifiClient = require("./lib/wificlient");
+				let connectPromises = [];
+				for (let ip=0;ip<2;ip++) {
+					console.log(`Connecting to ${ip}...`);
+					client = new WifiClient(ip, 1110);
+					clients.push(client);
+					connectPromises.push ( client.connect());
+				}
+				return Promise.all(connectPromises);
+			})
+			.then(main)
+			.catch(handleError);
+		}
+
 		else if (answer.selection === "disconnect") {
 			utils.checkConnected(client) 
 			.then((client) => {
