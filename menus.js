@@ -81,9 +81,17 @@ exports.mainChoices =  [
 
 exports.ensembleChoices =  [
 	{ 
-		name: 'Connect all pois',
+		name: 'Connect unconnected pois',
 		value: 'ens_connect'
-   	},
+    },
+    { 
+		name: 'Show poi connection status',
+		value: 'ens_show_status'
+    },
+    { 
+		name: 'Send client reconnect',
+		value: 'ens_client_disconnect'
+	},
    	{ 
 		name: 'Start pois',
 		value: 'ens_start_prog'
@@ -95,10 +103,6 @@ exports.ensembleChoices =  [
 	{ 
 		name: 'Pause pois',
 		value: 'ens_pause_proc'
-	},
-	{ 
-		name: 'Send client reconnect',
-		value: 'ens_client_disconnect'
 	},
 	{ 
 		name: 'Return to main menu',

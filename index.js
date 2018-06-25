@@ -265,7 +265,7 @@ var ensembleMenus = [
 		type: 'input',
 		name: 'ens_ip_incr',
 		message: `Select Poi (1-${constants.N_POIS}, a=all):`,
-		default: getDefaultIpIncr,
+		default: 'a',
 		when: function(answers) {
 		return (["ens_start_prog", "ens_stop_proc", "ens_pause_proc", "ens_client_disconnect"].includes(answers.ensSelection) );
 		}
@@ -291,6 +291,11 @@ function poiEnsemble(){
 			.then(poiEnsemble)
 			.catch(handleErrorEnsemble);
 		}
+		else if (answer.ensSelection === "ens_show_status") {
+			ensemble.showStatus(getPois(answer.ens_ip_incr))
+			.then(poiEnsemble)
+			.catch(handleErrorEnsemble);
+		}		
 		else if (answer.ensSelection === "ens_start_prog") {
 			ensemble.startProgram(getPois(answer.ens_ip_incr))
 			.then(poiEnsemble)
