@@ -14,6 +14,7 @@ const config = fs.existsSync(configFile)
 	? require('./' + configFile) : {};
 
 let client = null;
+const nPois =2;
 const clients = [];
 
 const mainChoices =  [
@@ -66,12 +67,12 @@ const mainChoices =  [
 	   	value:'ip_disconnect'
    	},
 	   {
-		name: 'Send client disconnect', 
+		name: 'Send client reconnect', 
 	   	value:'client_disconnect'
    	},
 	   {
-		name: 'Connect to all pois via Wifi', 
-	   	value:'wifi_connect_all_pois'
+		name: 'Work with poi ensemble', 
+	   	value:'ensemble'
    	},
    	{
 		name: 'Sync', 
@@ -95,6 +96,7 @@ const mainChoices =  [
 		value:'exit'
 	} 
 ];
+
 
 var mainMenu = [
   {
@@ -142,6 +144,49 @@ var mainMenu = [
   }
 ]
 
+const ensembleChoices =  [
+	{ 
+		name: 'Connect all pois',
+		value: 'ens_connect'
+   },
+   { 
+		name: 'Start pois',
+		value: 'ens_start_prog'
+	},
+	{ 
+		name: 'Stop pois',
+		value: 'ens_stop_proc'
+	},
+	{ 
+		name: 'Pause pois',
+		value: 'ens_pause_proc'
+	},
+	{ 
+		name: 'Send client reconnect',
+		value: 'ens_client_disconnect'
+	}
+];
+
+var ensembleMenu = [
+    {
+    type: 'rawlist',
+    name: 'ensSelection',
+	message: 'Ensemble Poi Controller',
+	pageSize: 10,
+    choices: ensembleChoices
+	},
+    {
+    type: 'input',
+    name: 'ens_ip_incr',
+    message: `Select Poi (1-${nPois}, a=all):`,
+    default: getDefaultIpIncr,
+    when: function(answers) {
+      return (["ens_start_prog", "ens_stop_proc", "ens_pause_proc", "ens_client_disconnect"].includes(answers.ensSelection) );
+	}
+  }
+];
+
+
 function getDefaultFilename(answers) {
 	switch (answers.selection) {
 		case "up_image":
@@ -175,9 +220,9 @@ function handleError(err) {
 	main();
 }
 
-function getIp(ipIncr) {
-	const ip4 = 127 + ipIncr;
-	return `192.168.1.${ip4}`;
+function handleErrorEnsemble(err) {
+	console.log("Error: " + err.message);
+	ensemble();
 }
 
 function main(){
@@ -197,7 +242,7 @@ function main(){
 		else if (answer.selection === "wifi_connect") {
 			utils.checkNotConnected(client) 
 			.then(() => {
-				const ip = getIp(parseInt(answer.ip_incr));
+				const ip = utils.getIp(parseInt(answer.ip_incr));
 				console.log(`Connecting to ${ip}...`);
 				const WifiClient = require("./lib/wificlient");
 				client = new WifiClient(ip, 1110);
@@ -206,21 +251,8 @@ function main(){
 			.then(main)
 			.catch(handleError);
 		}
-		else if (answer.selection === "wifi_connect_all_pois") {
-			utils.checkNotConnected(client) 
-			.then(() => {
-				const WifiClient = require("./lib/wificlient");
-				let connectPromises = [];
-				for (let ip=0;ip<2;ip++) {
-					console.log(`Connecting to ${ip}...`);
-					client = new WifiClient(ip, 1110);
-					clients.push(client);
-					connectPromises.push ( client.connect());
-				}
-				return Promise.all(connectPromises);
-			})
-			.then(main)
-			.catch(handleError);
+		else if (answer.ensSelection === "ens_connect") {
+			return ensemble();
 		}
 
 		else if (answer.selection === "disconnect") {
@@ -346,4 +378,17 @@ function main(){
 	});
 }
 
-main();
+function ensemble(){
+	inquirer.prompt(ensembleMenu).then(answer => {
+		if (answer.ensSelection === "ens_connect") {
+			const ensemble = require("./lib/wifiPoiEnsemble");
+			utils.checkNotConnected(client) 
+			.then(ensemble.connectAll)
+			.then(ensemble.showStatus)
+			.then(ensemble)
+			.catch(handleErrorEnsemble);
+		}
+	});
+}
+
+ensemble();
