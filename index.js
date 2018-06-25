@@ -15,7 +15,6 @@ const config = fs.existsSync(configFile)
 
 let client = null;
 const nPois =2;
-const clients = [];
 
 const mainChoices =  [
 	{ 
@@ -72,7 +71,7 @@ const mainChoices =  [
    	},
 	   {
 		name: 'Work with poi ensemble', 
-	   	value:'ensemble'
+	   	value:'ensemble_menu'
    	},
    	{
 		name: 'Sync', 
@@ -148,8 +147,8 @@ const ensembleChoices =  [
 	{ 
 		name: 'Connect all pois',
 		value: 'ens_connect'
-   },
-   { 
+   	},
+   	{ 
 		name: 'Start pois',
 		value: 'ens_start_prog'
 	},
@@ -164,26 +163,32 @@ const ensembleChoices =  [
 	{ 
 		name: 'Send client reconnect',
 		value: 'ens_client_disconnect'
+	},
+	{ 
+		name: 'Return to main menu',
+		value: 'ens_return_main'
 	}
+
 ];
 
 var ensembleMenu = [
     {
-    type: 'rawlist',
-    name: 'ensSelection',
-	message: 'Ensemble Poi Controller',
-	pageSize: 10,
-    choices: ensembleChoices
+		type: 'rawlist',
+		name: 'ensSelection',
+		message: 'Ensemble Poi Controller',
+		default: 'ens_connect',
+		pageSize: 10,
+		choices: ensembleChoices
 	},
     {
-    type: 'input',
-    name: 'ens_ip_incr',
-    message: `Select Poi (1-${nPois}, a=all):`,
-    default: getDefaultIpIncr,
-    when: function(answers) {
-      return (["ens_start_prog", "ens_stop_proc", "ens_pause_proc", "ens_client_disconnect"].includes(answers.ensSelection) );
-	}
-  }
+		type: 'input',
+		name: 'ens_ip_incr',
+		message: `Select Poi (1-${nPois}, a=all):`,
+		default: getDefaultIpIncr,
+		when: function(answers) {
+		return (["ens_start_prog", "ens_stop_proc", "ens_pause_proc", "ens_client_disconnect"].includes(answers.ensSelection) );
+		}
+  	}
 ];
 
 
@@ -222,7 +227,7 @@ function handleError(err) {
 
 function handleErrorEnsemble(err) {
 	console.log("Error: " + err.message);
-	ensemble();
+	subEnsemble();
 }
 
 function main(){
@@ -251,8 +256,8 @@ function main(){
 			.then(main)
 			.catch(handleError);
 		}
-		else if (answer.ensSelection === "ens_connect") {
-			return ensemble();
+		else if (answer.selection === "ensemble_menu") {
+			return subEnsemble();
 		}
 
 		else if (answer.selection === "disconnect") {
@@ -363,7 +368,6 @@ function main(){
 			.then(main)
 			.catch(handleError);
 		}
-
 		else {
 			utils.saveConfig(configFile, config)
 			.then(() => {
@@ -374,21 +378,23 @@ function main(){
 			})
 			.catch(handleError);
 		}
-
 	});
 }
 
-function ensemble(){
-	inquirer.prompt(ensembleMenu).then(answer => {
+function subEnsemble(){
+	return inquirer.prompt(ensembleMenu).then(answer => {
 		if (answer.ensSelection === "ens_connect") {
 			const ensemble = require("./lib/wifiPoiEnsemble");
-			utils.checkNotConnected(client) 
+			utils.checkNotConnected(client)
 			.then(ensemble.connectAll)
 			.then(ensemble.showStatus)
-			.then(ensemble)
+			.then(subEnsemble)
 			.catch(handleErrorEnsemble);
+		}
+		else {
+			main();
 		}
 	});
 }
 
-ensemble();
+main();
