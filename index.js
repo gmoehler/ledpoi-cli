@@ -5,6 +5,7 @@ const configFile = "config.json";
 const fs = require('fs');
 const inquirer = require('inquirer');
 
+const constants = require('./constants');
 const prg = require('./lib/program');
 const img = require('./lib/image');
 const show = require('./lib/show');
@@ -14,7 +15,6 @@ const config = fs.existsSync(configFile)
 	? require('./' + configFile) : {};
 
 let client = null;
-const nPois =2;
 
 const mainChoices =  [
 	{ 
@@ -183,7 +183,7 @@ var ensembleMenu = [
     {
 		type: 'input',
 		name: 'ens_ip_incr',
-		message: `Select Poi (1-${nPois}, a=all):`,
+		message: `Select Poi (1-${constants.N_POIS}, a=all):`,
 		default: getDefaultIpIncr,
 		when: function(answers) {
 		return (["ens_start_prog", "ens_stop_proc", "ens_pause_proc", "ens_client_disconnect"].includes(answers.ensSelection) );
