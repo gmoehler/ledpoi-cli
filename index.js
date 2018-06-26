@@ -95,12 +95,12 @@ function getSyncs(){
 
 function handleError(err) {
 	console.log("Error: " + err.message);
-	main();
+	return main();
 }
 
 function handleErrorEnsemble(err) {
 	console.log("Error: " + err.message);
-	poiEnsemble();
+	return poiEnsemble();
 }
 
 function main(){
@@ -283,7 +283,7 @@ function getPois(incr) {
 	if (incr === 'a') {
 		const a =  Array(constants.N_POIS);
 		for (var i=0; i<constants.N_POIS; i++) a[i] = i	;
-		console.log(a);
+		// console.log(a);
 		return a;
 	}
 	return [ incr ]; 
