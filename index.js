@@ -7,6 +7,8 @@ const inquirer = require('inquirer');
 
 const constants = require('./constants');
 const menus = require ('./menus');
+const ensemble = require("./lib/wifiPoiEnsemble");
+
 const prg = require('./lib/program');
 const img = require('./lib/image');
 const show = require('./lib/show');
@@ -242,10 +244,14 @@ function main(){
 		else {
 			utils.saveConfig(configFile, config)
 			.then(() => {
+				const proms = [];
 				if (client && client.isConnected()) {
-					return client.disconnect();
-			   }
-			   return Promise.resolve();
+					proms.push(client.disconnect());
+				}
+				if (ensemble.areClientsConnected()){
+					proms.push(ensemble.clientDisconnect(getPois("a")));
+				}   
+			   return Promise.all(proms);
 			})
 			.catch(handleError);
 		}
@@ -264,10 +270,11 @@ var ensembleMenus = [
     {
 		type: 'input',
 		name: 'ens_ip_incr',
-		message: `Select Poi (1-${constants.N_POIS}, a=all):`,
+		message: `Select Poi (0-${constants.N_POIS-1}, a=all):`,
 		default: 'a',
 		when: function(answers) {
-		return (["ens_start_prog", "ens_stop_proc", "ens_pause_proc", "ens_client_disconnect"].includes(answers.ensSelection) );
+		return (["ens_start_prog", "ens_stop_proc", "ens_pause_proc", 
+				 "ens_client_disconnect", "ens_reset_conn"].includes(answers.ensSelection) );
 		}
   	}
 ];
@@ -283,7 +290,7 @@ function getPois(incr) {
 }
 
 function poiEnsemble(){
-	const ensemble = require("./lib/wifiPoiEnsemble");
+
 	return inquirer.prompt(ensembleMenus).then(answer => {
 		if (answer.ensSelection === "ens_connect") {
 			ensemble.connectAll()
@@ -312,11 +319,16 @@ function poiEnsemble(){
 			.catch(handleErrorEnsemble);
 		}
 		else if (answer.ensSelection === "ens_client_disconnect") {
-			ensemble.clientReconnect(getPois(answer.ens_ip_incr))
+			ensemble.clientDisconnect(getPois(answer.ens_ip_incr))
 			.then(poiEnsemble)
 			.catch(handleErrorEnsemble);
 		}
-
+		else if (answer.ensSelection === "ens_reset_conn") {
+			ensemble.resetConnections(getPois(answer.ens_ip_incr))
+			.then(poiEnsemble)
+			.catch(handleErrorEnsemble);
+		}
+		
 		else {
 			main();
 		}

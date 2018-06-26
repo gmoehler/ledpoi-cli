@@ -50,7 +50,7 @@ exports.mainChoices =  [
 	   	value:'ip_disconnect'
    	},
 	   {
-		name: 'Send client reconnect', 
+		name: 'Send client disconnect', 
 	   	value:'client_disconnect'
    	},
 	   {
@@ -89,7 +89,7 @@ exports.ensembleChoices =  [
 		value: 'ens_show_status'
     },
     { 
-		name: 'Send client reconnect',
+		name: 'Send client disconnect',
 		value: 'ens_client_disconnect'
 	},
    	{ 
@@ -103,6 +103,10 @@ exports.ensembleChoices =  [
 	{ 
 		name: 'Pause pois',
 		value: 'ens_pause_proc'
+	},
+	{ 
+		name: 'Reset connection',
+		value: 'ens_reset_conn'
 	},
 	{ 
 		name: 'Return to main menu',
