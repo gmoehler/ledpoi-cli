@@ -120,10 +120,12 @@ function main(){
 		else if (answer.selection === "wifi_connect") {
 			utils.checkNotConnected(client) 
 			.then(() => {
-				const ip = utils.getIp(parseInt(answer.ip_incr));
-				console.log(`Connecting to ${ip}...`);
+				const ipIncr = parseInt(answer.ip_incr);
+				const ip = utils.getIp(ipIncr);
+				const port = utils.getPort(ipIncr, 0);
+				console.log(`Connecting to ${ip}:${port}...`);
 				const WifiClient = require("./lib/wificlient");
-				client = new WifiClient(ip, 1110);
+				client = new WifiClient(ip, port);
 				return client.connect();
 			})
 			.then(main)
@@ -273,10 +275,20 @@ var ensembleMenus = [
 		message: `Select Poi (0-${constants.N_POIS-1}, a=all):`,
 		default: 'a',
 		when: function(answers) {
-		return (["ens_start_prog", "ens_stop_proc", "ens_pause_proc", 
+			return (["ens_start_prog", "ens_stop_proc", "ens_pause_proc", 
 				 "ens_client_disconnect", "ens_reset_conn"].includes(answers.ensSelection) );
 		}
+	},
+	{
+		type: 'input',
+		name: 'ens_ip_var',
+		message: `Select port variation (0-${constants.N_PORT_VARS_ON_ERROR-1}):`,
+		default: '0',
+		when: function(answers) {
+			return ( answers.ensSelection === "ens_connect" );
+		}
   	}
+
 ];
 
 function getPois(incr) {
@@ -293,7 +305,7 @@ function poiEnsemble(){
 
 	return inquirer.prompt(ensembleMenus).then(answer => {
 		if (answer.ensSelection === "ens_connect") {
-			ensemble.connectAll()
+			ensemble.connectAll(answer.ens_ip_var && answer.ens_ip_var < constants.N_PORT_VARS_ON_ERROR ? answer.ens_ip_var : 0)
 			.then(ensemble.showStatus)
 			.then(poiEnsemble)
 			.catch(handleErrorEnsemble);

@@ -3,6 +3,9 @@
 // maximum number of pois that can be configured
 exports.N_POIS=10;
 
+// number of different port variations on error per client
+exports.N_PORT_VARS_ON_ERROR=5
+
 // this is int( N_NUM_IMAGE_SECTIONS*4096/(N_PIXELS*3) )
 // max is 255 because of uint8_t
 exports.N_FRAMES=227;
@@ -25,3 +28,6 @@ exports.UART_BAUD=921600
 
 // delay after 100 bytes sent
 exports.pauseAfter100Bytes = 200;
+
+// base port incremented by ip_incr
+exports.basePort = 1110;
