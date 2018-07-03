@@ -285,7 +285,7 @@ var ensembleMenus = [
 		message: `Select port variation (0-${constants.N_PORT_VARS_ON_ERROR-1}):`,
 		default: '0',
 		when: function(answers) {
-			return ( answers.ensSelection === "ens_connect" );
+			return ( constants.N_PORT_VARS_ON_ERROR > 0 &&  answers.ensSelection === "ens_connect");
 		}
   	}
 

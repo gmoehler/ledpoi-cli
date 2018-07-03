@@ -4,7 +4,7 @@
 exports.N_POIS=10;
 
 // number of different port variations on error per client
-exports.N_PORT_VARS_ON_ERROR=5
+exports.N_PORT_VARS_ON_ERROR=0 // no variation for now
 
 // this is int( N_NUM_IMAGE_SECTIONS*4096/(N_PIXELS*3) )
 // max is 255 because of uint8_t
