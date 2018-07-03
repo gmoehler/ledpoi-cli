@@ -122,7 +122,7 @@ function main(){
 			.then(() => {
 				const ipIncr = parseInt(answer.ip_incr);
 				const ip = utils.getIp(ipIncr);
-				const port = utils.getPort(ipIncr, 0);
+				const port = utils.getPort(0);
 				console.log(`Connecting to ${ip}:${port}...`);
 				const WifiClient = require("./lib/wificlient");
 				client = new WifiClient(ip, port);
@@ -340,7 +340,7 @@ function poiEnsemble(){
 			.then(poiEnsemble)
 			.catch(handleErrorEnsemble);
 		}
-		
+	
 		else {
 			main();
 		}
