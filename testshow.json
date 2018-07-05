@@ -1,0 +1,10 @@
+{
+	"program": {
+		"files": [
+			"programs/testprog.1.jpoi"
+		]
+	},
+	"images": {
+		"14": "images/14_colors.png"
+	}
+}
