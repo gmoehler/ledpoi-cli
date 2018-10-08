@@ -1,7 +1,7 @@
 "use strict"
 
 // maximum number of pois that can be configured
-exports.N_POIS=10;
+exports.N_POIS=12;
 
 // number of different port variations on error per client
 exports.N_PORT_VARS_ON_ERROR=0 // no variation for now

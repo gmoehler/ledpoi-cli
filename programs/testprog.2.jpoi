@@ -1,0 +1,6 @@
+
+loadScene(1)
+dim(0.5)
+playFrames(0, 179, 5, 3)
+ 
+
