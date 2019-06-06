@@ -10,15 +10,15 @@
   "author": "gm",
   "license": "MIT",
   "dependencies": {
-    "csv-parse": "2.4.0",
-    "eslint": "4.19.1",
-    "inquirer": "5.2.0",
+    "csv-parse": "4.4.3",
+    "eslint": "5.16.0",
+    "inquirer": "6.3.1",
     "net": "1.0.2",
-    "pngjs": "3.3.3",
-    "serialport": "6.2.0"
+    "pngjs": "3.4.0",
+    "serialport": "7.1.5"
   },
   "devDependencies": {
-    "jest": "22.4.3"
+    "jest": "24.8.0"
   },
   "jest": {
     "verbose": true,
