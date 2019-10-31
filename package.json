@@ -10,7 +10,7 @@
   "author": "gm",
   "license": "MIT",
   "dependencies": {
-    "csv-parse": "4.4.3",
+    "csv-parse": "4.4.6",
     "eslint": "5.16.0",
     "inquirer": "6.3.1",
     "net": "1.0.2",
